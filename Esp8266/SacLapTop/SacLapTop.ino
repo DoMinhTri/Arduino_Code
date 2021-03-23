@@ -115,7 +115,7 @@ String LayChuoiJson()
         HTTPClient http;
         String payload   = "";
         String SVLink    = "http://192.168.1.5/tuoicay/tuoicay.php" ;//+ SVID ;
-         http.begin(SVLink); //HTTP
+        http.begin(SVLink); //HTTP
         uint8_t httpCode = http.GET();
         if(httpCode > 0) 
         {

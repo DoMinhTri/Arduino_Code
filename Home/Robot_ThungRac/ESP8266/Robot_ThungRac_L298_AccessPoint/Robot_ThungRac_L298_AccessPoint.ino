@@ -28,7 +28,7 @@ void PageIndex() {
     if(getVal =="phai") { Xe_Phai();       }
     if(getVal =="dong") { ThungRac_Dong(); }
     if(getVal =="mo")   { ThungRac_Mo();   }
-}
+  }
   ///////////////////////
   server.send(200, "text/html", "<div align=center>RBTC20</div>" );
 }
