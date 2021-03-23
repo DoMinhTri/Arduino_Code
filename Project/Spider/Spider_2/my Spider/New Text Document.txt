@@ -1,0 +1,133 @@
+#include <IRremote.h>
+///////////////////
+int led   = 10;
+int pinIR = 11;
+IRrecv IRTrave(pinIR);
+decode_results Trave;
+
+int DayTinHieu[50] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} ;
+int SoLan[50]      = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} ;
+// Kieu So : 0 am, 1 duong
+int KieuDau[50]    = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} ;
+///////////////////
+void setup() 
+{ 
+   Serial.begin(9600);
+   IRTrave.enableIRIn();
+   pinMode(led, OUTPUT); 
+} 
+ 
+ 
+void loop() { 
+  
+ if (IRTrave.decode(&Trave)) 
+ {
+    int GT = Trave.value ;
+    NhayDenLed();    
+    SuLyTinHieu(GT);
+    IRTrave.resume();
+ }
+ 
+} 
+
+//-------------------------------------------------------------------
+void NhayDenLed()
+{
+   digitalWrite(led, HIGH);  
+   delay(100);               
+   digitalWrite(led, LOW);   
+   delay(100);               
+}
+//-------------------------------------------------------------------
+void SuLyTinHieu(int TinHieu)
+{
+  int ViTri       = 0 ;
+  int GiaTri      = 0 ;
+  int Dau         = 1 ; // So duong
+  int DauTinHieu  = 1 ; // So duong
+  boolean TimThay = false ; 
+  Serial.print("So tin hieu dau:");  Serial.println(TinHieu);  
+  /////////////////////
+  for(int i=0;i<50;i++)
+  {
+     ViTri  = i; 
+     Dau    = KieuDau[i];
+     GiaTri = DayTinHieu[i] ;
+     if(GiaTri == 0) break ;
+     ////////////////////// Kiem tra TinHieu am hay duong
+     if(TinHieu < 0)
+     {
+        DauTinHieu = 0;
+        TinHieu    = -TinHieu;
+     }
+     ////////////////////// 
+     if(TinHieu == GiaTri) 
+     {
+       if(DauTinHieu == Dau) { TimThay  = true  ;  break; }
+     }
+  }
+  
+  /////////////////////
+  Serial.print("Tim thay :");  Serial.println(TimThay);  
+  Serial.print("Vi tri :");    Serial.println(ViTri);
+  Serial.print("Kieu so :");     Serial.println(DauTinHieu);    
+  Serial.print("So tin hieu sau:");  Serial.println(TinHieu);  
+  if(TimThay)
+  {
+      SoLan[ViTri] = SoLan[ViTri] +1;
+      Serial.println("a");  
+  }
+  else
+  {
+      
+      DayTinHieu[ViTri] = TinHieu ;
+      SoLan[ViTri]      = 1;
+      KieuDau[ViTri]    = DauTinHieu ;
+      Serial.println("b");  
+      Serial.print("DayTinHieu :");    Serial.println(DayTinHieu[ViTri]);
+      Serial.print("SoLan :");     Serial.println(SoLan[ViTri]);    
+      Serial.print("KieuDau:");  Serial.println(KieuDau[ViTri]); 
+      Serial.println("========");  
+  }
+  //////////////////////////////////////////////////
+  Serial.println("--------------------------------------------------------------------");  
+  for(int j=0;j<50;j++)
+  {
+     if(DayTinHieu[j] > 0)
+     {
+        if(KieuDau[j] == 0) Serial.print("-");
+        Serial.print(DayTinHieu[j]);
+        Serial.print(",");
+     } else {break;}
+  }
+  Serial.println(" ");
+  for(int k=0;k<50;k++)
+  {
+     if(DayTinHieu[k] > 0)
+     {  
+        Serial.print("AAA");
+        Serial.print(",");
+     } else {break;}
+  }
+  Serial.println(" ");
+  //////////////////////////////////////////////////
+}
+//-------------------------------------------------------------------
+unsigned int Hex2Int(String hexString) {
+  
+  unsigned int decValue = 0;
+  int nextInt;
+  
+  for (int i = 0; i < hexString.length(); i++) {
+    
+    nextInt = int(hexString.charAt(i));
+    if (nextInt >= 48 && nextInt <= 57) nextInt = map(nextInt, 48, 57, 0, 9);
+    if (nextInt >= 65 && nextInt <= 70) nextInt = map(nextInt, 65, 70, 10, 15);
+    if (nextInt >= 97 && nextInt <= 102) nextInt = map(nextInt, 97, 102, 10, 15);
+    nextInt = constrain(nextInt, 0, 15);
+    
+    decValue = (decValue * 16) + nextInt;
+  }
+  
+  return decValue;
+}

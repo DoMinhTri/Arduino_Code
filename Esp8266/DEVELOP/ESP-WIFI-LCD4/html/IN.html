@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"></head><body onload="UpdateStatus();" bgcolor="AAAAFF"><center>
+<script language="JavaScript">
+			var	xmlHttp;
+			var ObjArray = new Array;
+
+			function GetXmlHttpObject(handler)
+			{
+			var objXmlHttp = null;
+
+			if(navigator.userAgent.indexOf("MSIE")>=0)
+			{
+			var ClassName = "Msxml2.XMLHTTP";
+			if(navigator.appVersion.indexOf("MSIE 5.5")>=0)
+			{
+			ClassName = "Microsoft.XMLHTTP";
+			}
+			try
+			{
+			objXmlHttp = new ActiveXObject(ClassName);
+			objXmlHttp.onreadystatechange = handler;
+			return objXmlHttp;
+			}
+			catch(e)
+			{
+			alert("Error: ActiveX scripting may be disabled.");
+			return;
+			}
+			}
+			else
+			{
+			try
+			{
+			objXmlHttp = new XMLHttpRequest();
+			objXmlHttp.onload = handler;
+			objXmlHttp.onerror = handler;
+			return objXmlHttp;
+			}
+			catch(e)
+			{
+			alert("Error: Browser may not be supported or browser security restrictions are too high.  XMLHttpRequest() support is required.");
+			}
+			}
+			}
+
+			function StateChanged()
+			{
+			if(xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
+			{
+			document.getElementById("txtAutoUpdateStatus").innerHTML=xmlHttp.responseText;
+			xmlHttp = null;
+			UpdateStatus();
+			}
+			}
+
+
+			function UpdateStatus()
+			{
+			xmlHttp = GetXmlHttpObject(StateChanged);
+			xmlHttp.open("GET", "Status.cgi" , true);
+			xmlHttp.send(null);
+			}
+
+			function GetServerFile(FileName, AssignTo)
+			{
+			var NiftyObj = new Object();
+			NiftyObj.XMLDevice = new GetXmlHttpObject(StateChanged2);
+			NiftyObj.XMLDevice.open("GET", FileName, true);
+			NiftyObj.XMLDevice.send(null);
+			NiftyObj.Text = AssignTo;
+			ObjArray.push(NiftyObj);
+			}
+
+			function StateChanged2()
+			{
+			for(i in ObjArray)
+			{
+			if(ObjArray[i].XMLDevice.readyState == 4 || ObjArray[i].XMLDevice.readyState == "complete")
+			{
+			if(ObjArray[i].Text != "")
+			{
+			document.getElementById(ObjArray[i].Text).innerHTML=ObjArray[i].XMLDevice.responseText;
+			}
+			if(ObjArray[i].Text == "txtAutoUpdateStatus")
+			{
+			GetServerFile("Status.cgi", "txtAutoUpdateStatus");
+			}
+			delete ObjArray[i].XMLDevice;
+			delete ObjArray[i];
+			}
+			}
+			}
+	</script>
+
+<blockquote dir="ltr" style="^MARGIN-RIGHT:" 0px^="">
+<img height="42" src="IB.jpg">
+<p align="center"><strong><font color="#ffff00" size="7">ELECTRONICS FOR YOU</font></strong></p>
+<p align="center"><strong>ESP8266&nbsp; BASED&nbsp; EMBEDDED WIRELESS WEBSERVER</strong></p></blockquote>
+<img src="ES.jpg"> 
+ <br>
+<form method="get" action="0">
+<b>Action</b><br>
+Toggle LED:<br>
+<input onclick="GetServerFile('0?1=LEDON','')" value="LEDON" type="button"> 
+<input onclick="GetServerFile('0?0=LEDOFF','')" value="LEDOFF" type="button"> 
+<br>
+<b>Status</b> 
+<span id="txtAutoUpdateStatus"</span>
+</form></center></body></html>

@@ -1,0 +1,27 @@
+
+,"Power"      (101)= HanhDong    ( 1-0 ===  On/Off )
+,"Vol +"       (11)= GocQuay ++
+,"Vol -"       (22)= GocQuay --
+,"CH +"        (33)= TocDo ++
+,"Ch -"        (44)= TocDo --
+,"[1]"          (1)= chan 1
+,"[2]"          (2)= chan 2
+,"[3]"          (3)= chan 3 
+,"[4]"          (4)= chan 4 
+,"[5]"          (5)= chan 5
+,"[6]"          (6)= chan 6
+,"[7]"          (7)= chan 7
+,"[8]"          (8)= chan 8
+,"[9]"          (9)=
+,"[+]"        (111)= TocDo++
+,"[0]"        (222)= KieuAuto     ++ ; // (0 = step) ---- (1= auto)
+,"[-/--]"     (333)= KieuHoatDong ++ ; // =1 nhom(1,2,3,4,5,6,7,8) -------  =2 nhom (11,22,33,44) --------------- =3 Nhom(41,42 - 4 tren hoac 4 duoi )
+,"Time"       (444)=
+,"Mute"       (555)=
+,"Right"     (1111)= Phai
+,"Down"      (2222)= Lui
+,"Left"      (3333)= Trai
+,"Up"        (4444)= Toi
+,"Null"      (5555)= Default 
+,"Main menu" (6666)=
+,"Pic menu"  (7777)=
