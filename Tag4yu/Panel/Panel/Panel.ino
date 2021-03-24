@@ -4,7 +4,7 @@
 #include <ESP8266WebServer.h>
 ESP8266WebServer server(80);
 ///////////////////////////////////////
-const char *ssid     = "4yPanel_1";
+const char *ssid     = "4ypanel_4";
 const char *password = "0918180212";
 String UartData, htmldata = "";
 #define GPIO0 0
@@ -91,7 +91,7 @@ void AutoReset()
     if(Phut >= 60)
     {
       Gio++;
-      if(Gio >= 24){ Restart(); }
+      if(Gio >= 18){ Restart(); }
     }
   }
 }
