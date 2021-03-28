@@ -9,31 +9,28 @@ const char *password = "0918180212";
 String UartData, htmldata = "";
 #define GPIO0 0
 uint8_t Gio, Phut, SoLan = 0;
+boolean TrangThai = false;
+
+#define MAX_CLIENTS 10
+WiFiClient *clients[MAX_CLIENTS] = { NULL };
 ///////////////////////////////////////
-void RelayOn() { digitalWrite(0, LOW); }
-void RelayOff(){ digitalWrite(0, HIGH);}
+void RelayOn() { digitalWrite(0, HIGH); TrangThai = true;  }
+void RelayOff(){ digitalWrite(0, LOW);  TrangThai = false; }//0907754818
 void Restart() { ESP.restart(); }
 ///////////////////////////////////////
 void Index() 
 {
+   htmldata = "";
    if (server.hasArg("4ypv"))
-   {    
-     String hdata = server.arg("4ypv").c_str(); 
-     if(hdata != "")
+  {    
+     htmldata = server.arg("4ypv").c_str(); 
+     if(htmldata != "")
      {
-        if(hdata == "off")
-        { 
-            RelayOff();
-        }
-        else
-        {
-           OnFunction(hdata);
-        }
+        if(htmldata == "off"){ RelayOff(); }
+        else{ OnFunction(htmldata); }
      }
-     ///////
-     htmldata = hdata;
    }
-   
+   ///////
    server.send(200, "text/html", "<div align=center><h1>" + htmldata+ "</h1></div>");
 }
 ///////////////////////////////////////
@@ -57,6 +54,8 @@ void setup()
 ///////////////////////////////////////
 void loop() {
   server.handleClient();
+  ////////////////////////////
+  CheckClienConn();
   ////////////////////////////
   while (Serial.available() > 0 ) 
   {
@@ -82,6 +81,11 @@ void loop() {
   AutoReset();
 }
 ////////////////////////////////////////////////////////////////////////////////////
+void CheckClienConn()
+{
+
+}
+////////////////////////////////////////////////////////////////////////////////////
 void AutoReset()
 {
   SoLan++;
@@ -91,7 +95,10 @@ void AutoReset()
     if(Phut >= 60)
     {
       Gio++;
-      if(Gio >= 18){ Restart(); }
+      if(Gio >= 18)
+      {
+        if(TrangThai == false){ Restart(); }
+      }
     }
   }
 }
