@@ -4,7 +4,7 @@
 #include <ESP8266WebServer.h>
 ESP8266WebServer server(80);
 ///////////////////////////////////////
-const char *ssid     = "4ypanel_4";
+const char *ssid     = "4ypanel_1";
 const char *password = "0918180212";
 String UartData, htmldata = "";
 #define GPIO0 0
@@ -15,7 +15,7 @@ boolean TrangThai = false;
 WiFiClient *clients[MAX_CLIENTS] = { NULL };
 ///////////////////////////////////////
 void RelayOn() { digitalWrite(0, HIGH); TrangThai = true;  }
-void RelayOff(){ digitalWrite(0, LOW);  TrangThai = false; }//0907754818
+void RelayOff(){ digitalWrite(0, LOW);  TrangThai = false; }
 void Restart() { ESP.restart(); }
 ///////////////////////////////////////
 void Index() 

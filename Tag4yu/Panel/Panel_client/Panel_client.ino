@@ -5,7 +5,7 @@
 uint8_t Gio, Phut, SoLan = 0;
 void Restart() { ESP.restart(); }
 ////////////////////////////////////
-const char *wi_ssid  = "4ypanel_4";    // Wifi 
+const char *wi_ssid  = "4ypanel_1";    // Wifi 
 const char *wi_pass  = "0918180212";
 
 void setup() 
